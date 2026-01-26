@@ -1,0 +1,27 @@
+{
+  "name": "junto-mcp",
+  "version": "0.1.0",
+  "description": "Multi-model thinking MCP server — orchestrates frontier AI models for deeper, more robust answers",
+  "type": "module",
+  "bin": {
+    "junto-mcp": "./build/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node build/index.js"
+  },
+  "keywords": ["mcp", "ai", "multi-model", "thinking", "openrouter"],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.25.3",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
+  }
+}
