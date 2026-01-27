@@ -35,19 +35,19 @@ server.registerTool(
       "in parallel and synthesize their responses into a single, deeply considered answer. " +
       "Use this for high-stakes decisions, complex reasoning, or when you want more confidence " +
       "in an answer than a single model can provide. " +
-      "Set pro=true to use GPT-5.2 Pro (dramatically more expensive — for exceptional prompts only).",
+      "Set pro=true to use GPT-5.2 Pro (5-10X slower and more expensive — for exceptional situations only).",
     inputSchema: {
       prompt: z
         .string()
         .describe(
-          "The question, task, or decision to think deeply about. Be specific and provide context."
+          "The question, task, or decision to think deeply about. Pass in the user's prompt (plus all relevant context) as-is. DO NOT rewrite the user's prompt.",
         ),
       pro: z
         .boolean()
         .optional()
         .default(false)
         .describe(
-          "Use GPT-5.2 Pro instead of GPT-5.2. Much more expensive (12x) — for exceptional prompts only."
+          "Use GPT-5.2 Pro instead of GPT-5.2. 5-10X slower and more expensive — for exceptional prompts only.",
         ),
     },
   },
@@ -74,8 +74,7 @@ server.registerTool(
         content: [{ type: "text", text: responseText }],
       };
     } catch (error) {
-      const errorMsg =
-        error instanceof Error ? error.message : String(error);
+      const errorMsg = error instanceof Error ? error.message : String(error);
       return {
         content: [
           {
@@ -86,7 +85,7 @@ server.registerTool(
         isError: true,
       };
     }
-  }
+  },
 );
 
 async function main() {
@@ -95,11 +94,9 @@ async function main() {
   const defaultPanel = buildPanel(false);
   console.error("[junto] MCP server running on stdio");
   console.error(
-    `[junto] Panel: ${defaultPanel.thinkers.map((t) => t.label).join(", ")}`
+    `[junto] Panel: ${defaultPanel.thinkers.map((t) => t.label).join(", ")}`,
   );
-  console.error(
-    `[junto] Consolidator: ${defaultPanel.consolidator.label}`
-  );
+  console.error(`[junto] Consolidator: ${defaultPanel.consolidator.label}`);
 }
 
 main().catch((error) => {
