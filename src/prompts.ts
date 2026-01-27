@@ -16,7 +16,7 @@ export interface ModelResponse {
  *
  * The prompt structure:
  * 1. The original user task
- * 2. All model responses, numbered and labeled
+ * 2. All model responses, numbered anonymously (no model names — prevents bias)
  * 3. Meta-instructions for critical synthesis
  */
 export function buildConsolidationPrompt(
@@ -26,7 +26,7 @@ export function buildConsolidationPrompt(
   const numberedResponses = responses
     .map(
       (r, i) =>
-        `<${i + 1} model="${r.label}">\n${r.content}\n</${i + 1}>`
+        `<${i + 1}>\n${r.content}\n</${i + 1}>`
     )
     .join("\n\n");
 

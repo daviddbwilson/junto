@@ -82,19 +82,19 @@ Your task:
 
 <responses>
 
-<1 model="GPT-5.2">
+<1>
 {response}
 </1>
 
-<2 model="Gemini 3 Pro">
+<2>
 {response}
 </2>
 
-<3 model="Grok 4">
+<3>
 {response}
 </3>
 
-<4 model="Claude Opus 4.5">
+<4>
 {response}
 </4>
 
