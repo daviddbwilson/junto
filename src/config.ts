@@ -42,11 +42,11 @@ export function buildPanel(pro: boolean): PanelConfig {
       { id: gptModelId, label: gptLabel, reasoning: { effort: "high" } },
       { id: "google/gemini-3-pro-preview", label: "Gemini 3 Pro" },
       { id: "x-ai/grok-4", label: "Grok 4" },
-      { id: "anthropic/claude-opus-4.5", label: "Claude Opus 4.5" },
+      { id: "anthropic/claude-opus-4-6", label: "Claude Opus 4.6" },
     ],
     consolidator: {
-      id: "anthropic/claude-opus-4.5",
-      label: "Claude Opus 4.5 (Consolidator)",
+      id: "anthropic/claude-opus-4-6",
+      label: "Claude Opus 4.6 (Consolidator)",
     },
   };
 }

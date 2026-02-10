@@ -31,7 +31,7 @@ server.registerTool(
   {
     title: "Junto — Multi-Model Deep Thinking",
     description:
-      "Consult multiple frontier AI models (GPT-5.2, Gemini 3 Pro, Grok 4, Claude Opus 4.5) " +
+      "Consult multiple frontier AI models (GPT-5.2, Gemini 3 Pro, Grok 4, Claude Opus 4.6) " +
       "in parallel and synthesize their responses into a single, deeply considered answer. " +
       "Use this for high-stakes decisions, complex reasoning, or when you want more confidence " +
       "in an answer than a single model can provide. " +
@@ -51,12 +51,31 @@ server.registerTool(
         ),
     },
   },
-  async ({ prompt, pro }) => {
+  async ({ prompt, pro }, extra) => {
     try {
-      const result = await think(config, prompt, pro, (msg) => {
-        // Log to stderr so it doesn't interfere with stdio JSON-RPC
-        console.error(`[junto] ${msg}`);
-      });
+      // Send progress notifications to keep the MCP connection alive.
+      // Without these, Claude Code's default 60s tool timeout kills the
+      // connection before the pipeline finishes (~50-90s for real prompts).
+      const progressToken = extra._meta?.progressToken;
+      let step = 0;
+      const totalSteps = 6; // query 4 models + consolidate + done
+
+      const sendProgress = async (message: string) => {
+        console.error(`[junto] ${message}`);
+        if (progressToken) {
+          await extra.sendNotification({
+            method: "notifications/progress" as const,
+            params: {
+              progressToken,
+              progress: ++step,
+              total: totalSteps,
+              message,
+            },
+          });
+        }
+      };
+
+      const result = await think(config, prompt, pro, sendProgress);
 
       // Build the response text
       let responseText = result.answer;

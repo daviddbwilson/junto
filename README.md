@@ -8,9 +8,9 @@ Junto is an MCP server that orchestrates multiple frontier AI models in parallel
 
 When you invoke the `think` tool:
 
-1. **Fan out** — Your prompt is sent to 4 frontier models simultaneously (GPT-5.2, Gemini 3 Pro, Grok 4, Claude Opus 4.5)
+1. **Fan out** — Your prompt is sent to 4 frontier models simultaneously (GPT-5.2, Gemini 3 Pro, Grok 4, Claude Opus 4.6)
 2. **Collect** — All responses are gathered (with graceful degradation if any model fails)
-3. **Synthesize** — A consolidator model (Claude Opus 4.5) receives all responses + a meta-prompt instructing it to critically evaluate, cross-reference, and produce the best possible answer
+3. **Synthesize** — A consolidator model (Claude Opus 4.6) receives all responses + a meta-prompt instructing it to critically evaluate, cross-reference, and produce the best possible answer
 4. **Return** — You get one answer, better than any single model would produce
 
 **Cost:** ~$0.10–$0.50 per query (standard). Pro mode with GPT-5.2 Pro is significantly more expensive.
@@ -122,8 +122,8 @@ For exceptional prompts, use pro mode:
 | Thinker 1 | GPT-5.2 | Reasoning effort set to "high" — deep chain-of-thought |
 | Thinker 2 | Gemini 3 Pro | #1 on LMArena, multimodal-native architecture |
 | Thinker 3 | Grok 4 | xAI's frontier model — different training philosophy |
-| Thinker 4 | Claude Opus 4.5 | Deepest reasoning capability from Anthropic |
-| **Consolidator** | Claude Opus 4.5 | Best at synthesis and critical judgment |
+| Thinker 4 | Claude Opus 4.6 | Deepest reasoning capability from Anthropic |
+| **Consolidator** | Claude Opus 4.6 | Best at synthesis and critical judgment |
 
 4 different providers (OpenAI, Google, xAI, Anthropic) for maximum architectural diversity.
 

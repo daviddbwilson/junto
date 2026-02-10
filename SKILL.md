@@ -3,7 +3,7 @@ name: junto
 description: >
   Multi-model deep thinking for high-stakes decisions. Calls the Junto MCP
   "think" tool to consult 4 frontier AI models (GPT-5.2, Gemini 3 Pro,
-  Grok 4, Claude Opus 4.5) in parallel and synthesize their responses.
+  Grok 4, Claude Opus 4.6) in parallel and synthesize their responses.
   Use when: (1) the user says "think deeply", "use junto", "consult the
   panel", "I need to think about this", "high-stakes decision", "important
   decision", "think hard about", (2) the user faces a consequential

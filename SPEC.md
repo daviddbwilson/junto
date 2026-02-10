@@ -33,9 +33,9 @@ User prompt
     ├──→ GPT-5.2 (reasoning: high) ──→ response 1 ─┐
     ├──→ Gemini 3 Pro              ──→ response 2 ─┤
     ├──→ Grok 4                    ──→ response 3 ─┤  (all 4 in parallel)
-    └──→ Claude Opus 4.5           ──→ response 4 ─┘
+    └──→ Claude Opus 4.6           ──→ response 4 ─┘
                                                      │
-         Consolidator (Claude Opus 4.5) ◄────────────┘
+         Consolidator (Claude Opus 4.6) ◄────────────┘
          receives: original prompt + all 4 + synthesis meta-prompt
               │
               ▼
@@ -53,8 +53,8 @@ All models are accessed through **OpenRouter** (`https://openrouter.ai/api/v1`),
 | Thinker 1 | OpenAI GPT-5.2 | `openai/gpt-5.2` | `reasoning.effort: "high"` |
 | Thinker 2 | Google Gemini 3 Pro | `google/gemini-3-pro-preview` | — |
 | Thinker 3 | xAI Grok 4 | `x-ai/grok-4` | — |
-| Thinker 4 | Anthropic Claude Opus 4.5 | `anthropic/claude-opus-4.5` | — |
-| **Consolidator** | Anthropic Claude Opus 4.5 | `anthropic/claude-opus-4.5` | — |
+| Thinker 4 | Anthropic Claude Opus 4.6 | `anthropic/claude-opus-4-6` | — |
+| **Consolidator** | Anthropic Claude Opus 4.6 | `anthropic/claude-opus-4-6` | — |
 
 **Why these models?** Architectural diversity maximizes the value of parallel thinking. Each model comes from a different company with different training data, RLHF approaches, and capability profiles. The consolidator uses Opus 4.5 because synthesis requires the deepest judgment.
 

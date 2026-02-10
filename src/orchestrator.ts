@@ -61,26 +61,23 @@ export async function think(
   config: JuntoConfig,
   prompt: string,
   pro: boolean = false,
-  onProgress?: (message: string) => void
+  onProgress?: (message: string) => void | Promise<void>
 ): Promise<ThinkResult> {
   const panel = buildPanel(pro);
-  const log = onProgress ?? (() => {});
+  const log = onProgress ? async (msg: string) => { await onProgress(msg); }
+                         : async (_msg: string) => {};
 
   // --- Phase 1: Fan out to all thinkers in parallel ---
 
   const modeLabel = pro ? " [PRO MODE]" : "";
-  log(
+  await log(
     `Consulting ${panel.thinkers.length} models${modeLabel}: ${panel.thinkers.map((t) => t.label).join(", ")}...`
   );
 
   const thinkerResults = await Promise.allSettled(
     panel.thinkers.map(async (model) => {
-      const reasoningNote = model.reasoning
-        ? ` (reasoning: ${model.reasoning.effort})`
-        : "";
-      log(`  → Querying ${model.label}${reasoningNote}...`);
       const content = await queryThinker(config, model, prompt);
-      log(`  ✓ ${model.label} responded (${content.length} chars)`);
+      await log(`  ✓ ${model.label} responded (${content.length} chars)`);
       return { label: model.label, content };
     })
   );
@@ -99,7 +96,6 @@ export async function think(
           ? result.reason.message
           : String(result.reason);
       failures.push({ model: model.label, error: errorMsg });
-      log(`  ✗ ${model.label} failed: ${errorMsg}`);
     }
   });
 
@@ -112,8 +108,8 @@ export async function think(
 
   // --- Phase 2: Consolidate ---
 
-  log(
-    `\nConsolidating ${responses.length} responses with ${panel.consolidator.label}...`
+  await log(
+    `Consolidating ${responses.length} responses with ${panel.consolidator.label}...`
   );
 
   const consolidationPrompt = buildConsolidationPrompt(prompt, responses);
@@ -132,7 +128,7 @@ export async function think(
     throw new Error("Consolidator returned an empty response.");
   }
 
-  log(`✓ Consolidation complete.`);
+  await log(`✓ Consolidation complete.`);
 
   // Strip <thinking> tags from the final output — these are for the model's
   // internal reasoning and shouldn't appear in the user-facing response.
