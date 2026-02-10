@@ -89,7 +89,7 @@ The env var overrides let you bump to a newer model (e.g., GPT-5.3) without code
 
 ```bash
 # Clone and install
-git clone <repo-url>
+git clone https://github.com/daviddbwilson/junto.git
 cd junto
 npm install
 
