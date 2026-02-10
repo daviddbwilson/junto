@@ -17,52 +17,93 @@ When you invoke the `think` tool:
 
 ## Quick Start
 
-### Prerequisites
+You need **Node.js 18+** and an [OpenRouter API key](https://openrouter.ai/keys).
 
-- Node.js 18+
-- An [OpenRouter](https://openrouter.ai) API key ([get one here](https://openrouter.ai/keys))
+### Paste to Your Agent
 
-### Install & Configure
+Copy the block for your platform and paste it into your agent. It'll handle the setup.
 
-Add Junto to your MCP client config:
+<details>
+<summary><strong>Claude Code</strong></summary>
 
-**Claude Code** — edit `~/.claude/mcp.json`:
+```
+Install the Junto MCP server for multi-model deep thinking. Do all of these steps:
 
-```json
-{
-  "mcpServers": {
-    "junto": {
-      "command": "npx",
-      "args": ["-y", "junto-mcp"],
-      "env": {
-        "OPENROUTER_API_KEY": "sk-or-v1-your-key-here"
-      }
-    }
-  }
-}
+1. Add junto to ~/.claude/mcp.json (create it if it doesn't exist, merge if it does):
+   {"mcpServers": {"junto": {"command": "npx", "args": ["-y", "junto-mcp"], "env": {"OPENROUTER_API_KEY": "YOUR_KEY_HERE"}}}}
+   Ask me for my OpenRouter API key if I haven't provided one.
+
+2. Set the tool timeout — Junto takes 60-90s, but the default MCP timeout is 60s.
+   Add this to my shell profile (~/.zshrc or ~/.bashrc):
+   export MCP_TOOL_TIMEOUT=300000
+
+3. Install the Junto skill so you automatically use it for high-stakes decisions:
+   mkdir -p ~/.claude/skills/junto
+   Download https://raw.githubusercontent.com/daviddbwilson/junto/master/SKILL.md
+   and save it to ~/.claude/skills/junto/SKILL.md
+
+4. Tell me to restart Claude Code to pick up the changes.
 ```
 
-**Claude Desktop** — edit `~/Library/Application Support/Claude/claude_desktop_config.json` with the same structure.
+</details>
 
-**Cursor** — edit `~/.cursor/mcp.json` with the same structure.
+<details>
+<summary><strong>Codex</strong></summary>
 
-### Set the Timeout
+```
+Install the Junto MCP server for multi-model deep thinking. Do all of these steps:
 
-Junto's pipeline takes **~60–90 seconds** (4 models in parallel + consolidation). Most MCP clients default to a 60-second tool timeout, which isn't enough.
+1. Add junto to ~/.codex/config.toml (create it if it doesn't exist, merge if it does):
+   [mcp_servers.junto]
+   command = "npx"
+   args = ["-y", "junto-mcp"]
+   [mcp_servers.junto.env]
+   OPENROUTER_API_KEY = "YOUR_KEY_HERE"
+   Ask me for my OpenRouter API key if I haven't provided one.
 
-**Claude Code** — add to your shell profile (`.zshrc` / `.bashrc`):
-
-```bash
-export MCP_TOOL_TIMEOUT=300000  # 5 minutes, in milliseconds
+2. Tell me to restart Codex to pick up the changes.
 ```
 
-Junto sends MCP progress notifications during execution to keep the connection alive, but setting `MCP_TOOL_TIMEOUT` is the reliable safety net.
+</details>
 
-**Claude Desktop** — does not currently support configurable tool timeouts. Junto's progress notifications should prevent timeouts in most cases.
+<details>
+<summary><strong>Cursor</strong></summary>
+
+```
+Install the Junto MCP server for multi-model deep thinking. Do all of these steps:
+
+1. Add junto to ~/.cursor/mcp.json (create it if it doesn't exist, merge if it does):
+   {"mcpServers": {"junto": {"command": "npx", "args": ["-y", "junto-mcp"], "env": {"OPENROUTER_API_KEY": "YOUR_KEY_HERE"}}}}
+   Ask me for my OpenRouter API key if I haven't provided one.
+
+2. Tell me to restart Cursor to pick up the changes.
+```
+
+</details>
+
+<details>
+<summary><strong>Claude Desktop</strong></summary>
+
+```
+Install the Junto MCP server for multi-model deep thinking. Do all of these steps:
+
+1. Add junto to ~/Library/Application Support/Claude/claude_desktop_config.json
+   (create it if it doesn't exist, merge into mcpServers if it does):
+   {"mcpServers": {"junto": {"command": "npx", "args": ["-y", "junto-mcp"], "env": {"OPENROUTER_API_KEY": "YOUR_KEY_HERE"}}}}
+   Ask me for my OpenRouter API key if I haven't provided one.
+
+2. Tell me to restart Claude Desktop to pick up the changes.
+```
+
+</details>
+
+### Timeout Note
+
+Junto's pipeline takes **~60–90 seconds** (4 models queried in parallel + consolidation). It sends MCP progress notifications to keep the connection alive, but some clients have a hard 60-second timeout. If you hit timeouts, set `MCP_TOOL_TIMEOUT=300000` in your shell profile.
 
 ### Use It
 
-In your AI assistant, just ask it to use the think tool:
+Ask your agent to use the think tool:
 
 > "Use the think tool to help me decide whether to raise a seed round or bootstrap."
 
@@ -129,18 +170,6 @@ node build/test-think.js "Your prompt here" --pro
 # Watch mode for development
 npm run dev
 ```
-
-## Claude Code Skill
-
-Junto ships with a [SKILL.md](./SKILL.md) that teaches Claude Code when to automatically invoke the `think` tool. To install it:
-
-```bash
-# Symlink the skill into Claude Code's skills directory
-mkdir -p ~/.claude/skills
-ln -s /path/to/junto/SKILL.md ~/.claude/skills/junto/SKILL.md
-```
-
-Or just copy `SKILL.md` into `~/.claude/skills/junto/`. Once installed, Claude Code will proactively use Junto when you face high-stakes decisions.
 
 ## Architecture
 
