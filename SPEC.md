@@ -10,7 +10,7 @@ An MCP server tool that orchestrates multiple frontier AI models (GPT-5.2, Gemin
 
 ## Who Is This For?
 
-The primary user is a technical power user — a founder, senior engineer, or technical lead — who makes consequential decisions and wants to stress-test their thinking. The kind of person who would convene a room of smart advisors before making a big call, except the advisors are frontier AI models.
+Power users — founders, engineers, researchers, builders — who makes consequential decisions and wants to stress-test their thinking. The kind of person who would convene a room of smart advisors before making a big call, except the advisors are frontier AI models.
 
 ## Core Value Proposition
 
@@ -189,11 +189,9 @@ junto/
 
 2. **Graceful degradation.** If 1-3 models fail (timeout, rate limit), the tool still consolidates from whatever responded. Only errors if ALL 4 fail.
 
-3. **Opinionated defaults, simple overrides.** The default model panel is carefully chosen. Power users can override the GPT slot via env vars.
+3. **Single dependency.** OpenRouter is the only integration. One key, one bill.
 
-4. **Single dependency for AI.** OpenRouter is the only integration. One key, one bill.
-
-5. **No vendor lock-in.** The synthesis prompt and orchestration logic are model-agnostic.
+4. **Model-blind consolidation.** The synthesis prompt hides the names of the other models to prevent potential bias.
 
 ---
 
@@ -217,7 +215,9 @@ junto/
 
 ## Future Considerations
 
-- **Hosted deployment:** Streamable HTTP transport on Cloudflare Workers, with API key passed via header. A simple landing page for config generation. Full OAuth if there's demand.
+- **Hosted deployment:** Streamable HTTP transport on Cloudflare Workers, with API key passed via header. A simple landing page for config generation. 
 - **Streaming:** Stream the consolidation step to improve perceived latency.
 - **Transparency mode:** Option to return individual model responses alongside the synthesis.
 - **Extended thinking for other models:** Enable reasoning parameters for Grok, Gemini, etc. where supported.
+
+Contributions welcome.

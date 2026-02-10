@@ -33,8 +33,10 @@ Install the Junto MCP server for multi-model deep thinking. Do all of these step
    {"mcpServers": {"junto": {"command": "npx", "args": ["-y", "junto-mcp"], "env": {"OPENROUTER_API_KEY": "YOUR_KEY_HERE"}}}}
    Ask me for my OpenRouter API key if I haven't provided one.
 
-2. Set the tool timeout — Junto takes 60-90s, but the default MCP timeout is 60s.
-   Add this to my shell profile (~/.zshrc or ~/.bashrc):
+2. CRITICAL — set the tool timeout. Junto queries 4 frontier models in parallel
+   then consolidates, which takes 60-120+ seconds depending on prompt complexity.
+   The default MCP tool timeout is only 60 seconds and WILL cause failures.
+   Add this line to the user's shell profile (~/.zshrc or ~/.bashrc):
    export MCP_TOOL_TIMEOUT=300000
 
 3. Install the Junto skill so you automatically use it for high-stakes decisions:
@@ -61,7 +63,32 @@ Install the Junto MCP server for multi-model deep thinking. Do all of these step
    OPENROUTER_API_KEY = "YOUR_KEY_HERE"
    Ask me for my OpenRouter API key if I haven't provided one.
 
-2. Tell me to restart Codex to pick up the changes.
+2. CRITICAL — set the tool timeout. Junto queries 4 frontier models in parallel
+   then consolidates, which takes 60-120+ seconds depending on prompt complexity.
+   The default MCP tool timeout is only 60 seconds and WILL cause failures.
+   Add this line to the user's shell profile (~/.zshrc or ~/.bashrc):
+   export MCP_TOOL_TIMEOUT=300000
+
+3. Tell me to restart Codex to pick up the changes.
+```
+
+</details>
+
+<details>
+<summary><strong>OpenClaw</strong></summary>
+
+OpenClaw uses MCP servers via [mcporter](https://github.com/steipete/mcporter). Paste this into your OpenClaw agent:
+
+```
+Install the Junto MCP server for multi-model deep thinking. Do all of these steps:
+
+1. Add junto to the mcporter config. Either run:
+   mcporter config add junto --command npx --arg "-y" --arg "junto-mcp" --env "OPENROUTER_API_KEY=YOUR_KEY_HERE" --scope project
+   Or create/merge into ~/.mcporter/mcporter.json:
+   {"mcpServers": {"junto": {"command": "npx", "args": ["-y", "junto-mcp"], "env": {"OPENROUTER_API_KEY": "YOUR_KEY_HERE"}}}}
+   Ask me for my OpenRouter API key if I haven't provided one.
+
+2. Tell me to restart OpenClaw to pick up the changes.
 ```
 
 </details>
@@ -97,9 +124,9 @@ Install the Junto MCP server for multi-model deep thinking. Do all of these step
 
 </details>
 
-### Timeout Note
+### Timeout
 
-Junto's pipeline takes **~60–90 seconds** (4 models queried in parallel + consolidation). It sends MCP progress notifications to keep the connection alive, but some clients have a hard 60-second timeout. If you hit timeouts, set `MCP_TOOL_TIMEOUT=300000` in your shell profile.
+Junto queries 4 frontier models in parallel then consolidates — this takes **60–120+ seconds** depending on prompt complexity and context length. The default MCP tool timeout in most clients is 60 seconds, which **will** cause failures. The install blocks above include the timeout fix (`MCP_TOOL_TIMEOUT=300000`), but if you're installing manually, add `export MCP_TOOL_TIMEOUT=300000` to your shell profile.
 
 ### Use It
 
