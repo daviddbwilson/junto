@@ -24,7 +24,9 @@ When you invoke the `think` tool:
 
 ### Install & Configure
 
-Add Junto to your MCP client config. For **Claude Desktop**, edit `~/Library/Application Support/Claude/claude_desktop_config.json`:
+Add Junto to your MCP client config:
+
+**Claude Code** — edit `~/.claude/mcp.json`:
 
 ```json
 {
@@ -40,7 +42,23 @@ Add Junto to your MCP client config. For **Claude Desktop**, edit `~/Library/App
 }
 ```
 
-For **Cursor**, edit `~/.cursor/mcp.json` with the same structure.
+**Claude Desktop** — edit `~/Library/Application Support/Claude/claude_desktop_config.json` with the same structure.
+
+**Cursor** — edit `~/.cursor/mcp.json` with the same structure.
+
+### Set the Timeout
+
+Junto's pipeline takes **~60–90 seconds** (4 models in parallel + consolidation). Most MCP clients default to a 60-second tool timeout, which isn't enough.
+
+**Claude Code** — add to your shell profile (`.zshrc` / `.bashrc`):
+
+```bash
+export MCP_TOOL_TIMEOUT=300000  # 5 minutes, in milliseconds
+```
+
+Junto sends MCP progress notifications during execution to keep the connection alive, but setting `MCP_TOOL_TIMEOUT` is the reliable safety net.
+
+**Claude Desktop** — does not currently support configurable tool timeouts. Junto's progress notifications should prevent timeouts in most cases.
 
 ### Use It
 
@@ -111,6 +129,18 @@ node build/test-think.js "Your prompt here" --pro
 # Watch mode for development
 npm run dev
 ```
+
+## Claude Code Skill
+
+Junto ships with a [SKILL.md](./SKILL.md) that teaches Claude Code when to automatically invoke the `think` tool. To install it:
+
+```bash
+# Symlink the skill into Claude Code's skills directory
+mkdir -p ~/.claude/skills
+ln -s /path/to/junto/SKILL.md ~/.claude/skills/junto/SKILL.md
+```
+
+Or just copy `SKILL.md` into `~/.claude/skills/junto/`. Once installed, Claude Code will proactively use Junto when you face high-stakes decisions.
 
 ## Architecture
 
