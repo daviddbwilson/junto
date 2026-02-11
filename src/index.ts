@@ -54,11 +54,11 @@ server.registerTool(
   async ({ prompt, pro }, extra) => {
     try {
       // Send progress notifications to keep the MCP connection alive.
-      // Without these, Claude Code's default 60s tool timeout kills the
-      // connection before the pipeline finishes (~50-90s for real prompts).
+      // Claude Code has a ~30s idle timeout for tool calls. The heartbeat
+      // sends periodic pings so long-running model calls don't get killed.
       const progressToken = extra._meta?.progressToken;
       let step = 0;
-      const totalSteps = 6; // query 4 models + consolidate + done
+      const totalSteps = 100; // use a large total so heartbeats don't max out
 
       const sendProgress = async (message: string) => {
         console.error(`[junto] ${message}`);
@@ -67,7 +67,7 @@ server.registerTool(
             method: "notifications/progress" as const,
             params: {
               progressToken,
-              progress: ++step,
+              progress: Math.min(++step, totalSteps - 1),
               total: totalSteps,
               message,
             },
@@ -75,7 +75,27 @@ server.registerTool(
         }
       };
 
-      const result = await think(config, prompt, pro, sendProgress);
+      // Heartbeat: send a progress ping every 15s to prevent idle timeout
+      let lastMessage = "Thinking...";
+      const heartbeat = setInterval(async () => {
+        try {
+          await sendProgress(lastMessage);
+        } catch {
+          // Ignore — connection may have closed
+        }
+      }, 15_000);
+
+      const wrappedProgress = async (message: string) => {
+        lastMessage = message;
+        await sendProgress(message);
+      };
+
+      let result;
+      try {
+        result = await think(config, prompt, pro, wrappedProgress);
+      } finally {
+        clearInterval(heartbeat);
+      }
 
       // Build the response text
       let responseText = result.answer;
