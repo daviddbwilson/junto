@@ -33,18 +33,12 @@ Install the Junto MCP server for multi-model deep thinking. Do all of these step
    {"mcpServers": {"junto": {"command": "npx", "args": ["-y", "junto-mcp"], "env": {"OPENROUTER_API_KEY": "YOUR_KEY_HERE"}}}}
    Ask me for my OpenRouter API key if I haven't provided one.
 
-2. CRITICAL — set the tool timeout. Junto queries 4 frontier models in parallel
-   then consolidates, which takes 60-120+ seconds depending on prompt complexity.
-   The default MCP tool timeout is only 60 seconds and WILL cause failures.
-   Add this line to the user's shell profile (~/.zshrc or ~/.bashrc):
-   export MCP_TOOL_TIMEOUT=300000
-
-3. Install the Junto skill so you automatically use it for high-stakes decisions:
+2. Install the Junto skill so you automatically use it for high-stakes decisions:
    mkdir -p ~/.claude/skills/junto
    Download https://raw.githubusercontent.com/daviddbwilson/junto/master/SKILL.md
    and save it to ~/.claude/skills/junto/SKILL.md
 
-4. Tell me to restart Claude Code to pick up the changes.
+3. Tell me to restart Claude Code to pick up the changes.
 ```
 
 </details>
@@ -63,13 +57,7 @@ Install the Junto MCP server for multi-model deep thinking. Do all of these step
    OPENROUTER_API_KEY = "YOUR_KEY_HERE"
    Ask me for my OpenRouter API key if I haven't provided one.
 
-2. CRITICAL — set the tool timeout. Junto queries 4 frontier models in parallel
-   then consolidates, which takes 60-120+ seconds depending on prompt complexity.
-   The default MCP tool timeout is only 60 seconds and WILL cause failures.
-   Add this line to the user's shell profile (~/.zshrc or ~/.bashrc):
-   export MCP_TOOL_TIMEOUT=300000
-
-3. Tell me to restart Codex to pick up the changes.
+2. Tell me to restart Codex to pick up the changes.
 ```
 
 </details>
@@ -123,10 +111,6 @@ Install the Junto MCP server for multi-model deep thinking. Do all of these step
 ```
 
 </details>
-
-### Timeout
-
-Junto queries 4 frontier models in parallel then consolidates — this takes **60–120+ seconds** depending on prompt complexity and context length. The default MCP tool timeout in most clients is 60 seconds, which **will** cause failures. The install blocks above include the timeout fix (`MCP_TOOL_TIMEOUT=300000`), but if you're installing manually, add `export MCP_TOOL_TIMEOUT=300000` to your shell profile.
 
 ### Use It
 
