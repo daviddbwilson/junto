@@ -57,6 +57,7 @@ server.registerTool(
       // Claude Code has a ~30s idle timeout for tool calls. The heartbeat
       // sends periodic pings so long-running model calls don't get killed.
       const progressToken = extra._meta?.progressToken;
+      console.error(`[junto] progressToken: ${progressToken ?? "NONE — heartbeat will be stderr-only"}`);
       let step = 0;
       const totalSteps = 100; // use a large total so heartbeats don't max out
 
